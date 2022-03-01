@@ -3,8 +3,8 @@
 <br />
 <div align="center">
  <p>
-    <a href="#demo">View Sample</a>
-    ·
+    <!-- <a href="#demo">View Sample</a>
+    · -->
     <a href="https://github.com/pysaurav/traceable-sankey-chart/issues">Report Bug</a>
     ·
     <a href="https://github.com/pysaurav/traceable-sankey-chart/issues">Request Feature</a>
@@ -42,7 +42,7 @@
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-![Traceable Sankey Chart](https://github.com/pysaurav/traceable-sankey-chart/image/sankey_sample.jpg)
+![Traceable Sankey Chart](https://github.com/pysaurav/traceable-sankey-chart/blob/main/image/sankey_sample.png)
 
 
 
