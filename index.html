@@ -1,139 +1,305 @@
-<div id="chartdiv"></div>
-<style>
-    #chartdiv {
-      width: 80%;
-      height: 500px;
-    }
+<!doctype html>
+<html>
+
+<head>
+</head>
+
+<body>
+    <h3> Sample Traceable Sankey Chart </h3>
+    <div id="chartdiv"></div>
+    <style>
+        #chartdiv {
+            width: 80%;
+            height: 500px;
+        }
     </style>
-    
+
     <!-- Resources -->
     <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/flow.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
-    
+
     <!-- Chart code -->
     <script>
-    am5.ready(function() {
-    
-    // Create root element
-    // https://www.amcharts.com/docs/v5/getting-started/#Root_element
-    var root = am5.Root.new("chartdiv");
-    
-    // Set themes
-    // https://www.amcharts.com/docs/v5/concepts/themes/
-    root.setThemes([am5themes_Animated.new(root)]);
-    
-    // Create series
-    // https://www.amcharts.com/docs/v5/charts/flow-charts/
-    var series = root.container.children.push(
-      am5flow.Sankey.new(root, {
-        sourceIdField: "from",
-        targetIdField: "to",
-        valueField: "value",
-        paddingRight: 50,
-        idField: "id"
-      })
-    );
-
-    console.log('series',series);
-    series.nodes.get("colors").set("step", 2);
-    series.links.template.setAll({ fillStyle: "solid", fillOpacity: 0.15 });
-    // series.links.template.propertyFields.showTooltipOn = "tooltip";
-    series.links.template.showTooltipOn = "always";
-
-    // chart.links.template.tooltipText = "";
+        am5.ready(function() {
 
 
-    // highlight all links with the same id beginning
-    series.links.template.events.on("pointerover", function (event) {
-      var dataItem = event.target.dataItem;
-      console.log("DI", dataItem)
+            var root = am5.Root.new("chartdiv");
+            root.setThemes([am5themes_Animated.new(root)]);
 
-    //   console.log('dataItem',dataItem)
-      var id = dataItem.get("id").split("-")[0];
-    //   dataItem.showTooltipOn = "always";
-    //   console.log('id',dataItem.get("id"));
-    //   console.log(dataItem.get("id").split("-")[0])
-      
-    
-      am5.array.each(series.dataItems, function (dataItem) {
-        if (dataItem.get("id").indexOf(id) != -1) {
-        // console.log('here',dataItem.get("id").indexOf(id))
-        // console.log("each",dataItem.get("id"))
-        // console.log("ea", dataItem.get("link"))
-          dataItem.get("link").hover();
-          dataItem.showTooltipOn = "always";
-        }
-      });
-    });
-    
-    series.links.template.events.on("pointerout", function (event) {
-      am5.array.each(series.dataItems, function (dataItem) {
-        dataItem.get("link").unhover();
-      });
-    });
-    
-    // Set data
-    // https://www.amcharts.com/docs/v5/charts/flow-charts/#Setting_data
-    series.data.setAll([
-        { from: "Brazil", to: "Portugal", value: 1, id:"A0-0" },
-        { from: "Brazil", to: "Spain", value: 1, id:"A1-0" },
-        { from: "Brazil", to: "England", value: 1, id:"A2-0" },
-        
-        { from: "Mexico", to: "Portugal", value: 1, id:"B0-0" },
-        { from: "Mexico", to: "Spain", value: 1, id:"B1-0" },
-        { from: "Mexico", to: "England", value: 1, id:"B2-0" },  
-        
-        { from: "USA", to: "Spain", value: 1, id:"C0-0" },
-        { from: "USA", to: "England", value: 1, id:"C1-0" },
-        { from: "USA", to: "France", value: 1, id:"C2-0" },    
+            // https://www.amcharts.com/docs/v5/charts/flow-charts/
+            var series = root.container.children.push(
+                am5flow.Sankey.new(root, {
+                    sourceIdField: "from",
+                    targetIdField: "to",
+                    valueField: "value",
+                    paddingRight: 50,
+                    idField: "id"
+                })
+            );
 
-        { from: "Canada", to: "Portugal", value: 1, id:"D0-0" },
-        { from: "Canada", to: "Spain", value: 1, id:"D1-0" },
-        { from: "Canada", to: "England", value: 1, id:"D2-0" },      
-        { from: "Canada", to: "France", value: 1, id:"D3-0" },        
+            console.log('series', series);
+            series.nodes.get("colors").set("step", 2);
+            series.links.template.setAll({
+                fillStyle: "solid",
+                fillOpacity: 0.15
+            });
+            // series.links.template.propertyFields.showTooltipOn = "tooltip";
+            series.links.template.showTooltipOn = "always";
 
-        { from: "Portugal", to: "South Africa", value: 1, id:"A0-1" },
-        { from: "Portugal", to: "South Africa", value: 1, id:"B0-1" },      
-        { from: "Portugal", to: "Senegal", value: 1, id:"D0-1" },          
+            // chart.links.template.tooltipText = "";
 
-        { from: "Spain", to: "South Africa", value: 1, id:"A1-1" },
-        { from: "Spain", to: "South Africa", value: 1, id:"C0-1" },      
-        { from: "Spain", to: "South Africa", value: 1, id:"D1-1" },          
-        { from: "Spain", to: "Mali", value: 1, id:"B1-1" },          
 
-        { from: "England", to: "South Africa", value: 1, id:"A2-1" },
-        { from: "England", to: "South Africa", value: 1, id:"B2-1" },      
-        { from: "England", to: "Angola", value: 1, id:"C1-1" },          
-        { from: "England", to: "China", value: 1, id:"D2-1" },  
+            // highlight all links with the same id beginning
+            series.links.template.events.on("pointerover", function(event) {
+                var dataItem = event.target.dataItem;
+                console.log("DI", dataItem)
 
-        { from: "France", to: "Morocco", value: 1, id:"C2-1" },          
-        { from: "France", to: "China", value: 1, id:"D3-1" },    
+                //   console.log('dataItem',dataItem)
+                var id = dataItem.get("id").split("-")[0];
+                //   dataItem.showTooltipOn = "always";
 
-        { from: "South Africa", to: "Japan", value: 1, id:"A0-2" },
-        { from: "South Africa", to: "Japan", value: 1, id:"B2-2" },      
-        { from: "South Africa", to: "Mangolia", value: 1, id:"A1-2" },          
-        { from: "South Africa", to: "Vietnam", value: 1, id:"A2-2" },          
-        { from: "South Africa", to: "PNG", value: 1, id:"D1-2" },
-        { from: "South Africa", to: "Maldives", value: 1, id:"B0-2" },          
-        { from: "South Africa", to: "Mangolia", value: 1, id:"C0-2" },          
+                am5.array.each(series.dataItems, function(dataItem) {
+                    if (dataItem.get("id").indexOf(id) != -1) {
+                        dataItem.get("link").hover();
+                        dataItem.showTooltipOn = "always";
+                    }
+                });
+            });
 
-        { from: "Angola", to: "Germany", value: 1, id:"C1-2" },            
-        
-        { from: "Morocco", to: "Finland", value: 1, id:"C2-2" },              
-        { from: "Mali", to: "Germany", value: 1, id:"B1-2" },                
+            series.links.template.events.on("pointerout", function(event) {
+                am5.array.each(series.dataItems, function(dataItem) {
+                    dataItem.get("link").unhover();
+                });
+            });
 
-        { from: "China", to: "Mangolia", value: 1, id:"D2-2" },                
-        { from: "China", to: "Mangolia", value: 1, id:"D3-2" },
+            series.data.setAll([{
+                    from: "Brazil",
+                    to: "Portugal",
+                    value: 1,
+                    id: "A0-0"
+                }, {
+                    from: "Brazil",
+                    to: "Spain",
+                    value: 1,
+                    id: "A1-0"
+                }, {
+                    from: "Brazil",
+                    to: "England",
+                    value: 1,
+                    id: "A2-0"
+                },
 
-        { from: "Senegal", to: "Ukraine", value: 1, id:"D0-2" }
-        ]);
-    
-    // Make stuff animate on load
-    series.appear(1000, 100);
-    
-    }); // end am5.ready()
+                {
+                    from: "Mexico",
+                    to: "Portugal",
+                    value: 1,
+                    id: "B0-0"
+                }, {
+                    from: "Mexico",
+                    to: "Spain",
+                    value: 1,
+                    id: "B1-0"
+                }, {
+                    from: "Mexico",
+                    to: "England",
+                    value: 1,
+                    id: "B2-0"
+                },
+
+                {
+                    from: "USA",
+                    to: "Spain",
+                    value: 1,
+                    id: "C0-0"
+                }, {
+                    from: "USA",
+                    to: "England",
+                    value: 1,
+                    id: "C1-0"
+                }, {
+                    from: "USA",
+                    to: "France",
+                    value: 1,
+                    id: "C2-0"
+                },
+
+                {
+                    from: "Canada",
+                    to: "Portugal",
+                    value: 1,
+                    id: "D0-0"
+                }, {
+                    from: "Canada",
+                    to: "Spain",
+                    value: 1,
+                    id: "D1-0"
+                }, {
+                    from: "Canada",
+                    to: "England",
+                    value: 1,
+                    id: "D2-0"
+                }, {
+                    from: "Canada",
+                    to: "France",
+                    value: 1,
+                    id: "D3-0"
+                },
+
+                {
+                    from: "Portugal",
+                    to: "South Africa",
+                    value: 1,
+                    id: "A0-1"
+                }, {
+                    from: "Portugal",
+                    to: "South Africa",
+                    value: 1,
+                    id: "B0-1"
+                }, {
+                    from: "Portugal",
+                    to: "Senegal",
+                    value: 1,
+                    id: "D0-1"
+                },
+
+                {
+                    from: "Spain",
+                    to: "South Africa",
+                    value: 1,
+                    id: "A1-1"
+                }, {
+                    from: "Spain",
+                    to: "South Africa",
+                    value: 1,
+                    id: "C0-1"
+                }, {
+                    from: "Spain",
+                    to: "South Africa",
+                    value: 1,
+                    id: "D1-1"
+                }, {
+                    from: "Spain",
+                    to: "Mali",
+                    value: 1,
+                    id: "B1-1"
+                },
+
+                {
+                    from: "England",
+                    to: "South Africa",
+                    value: 1,
+                    id: "A2-1"
+                }, {
+                    from: "England",
+                    to: "South Africa",
+                    value: 1,
+                    id: "B2-1"
+                }, {
+                    from: "England",
+                    to: "Angola",
+                    value: 1,
+                    id: "C1-1"
+                }, {
+                    from: "England",
+                    to: "China",
+                    value: 1,
+                    id: "D2-1"
+                },
+
+                {
+                    from: "France",
+                    to: "Morocco",
+                    value: 1,
+                    id: "C2-1"
+                }, {
+                    from: "France",
+                    to: "China",
+                    value: 1,
+                    id: "D3-1"
+                },
+
+                {
+                    from: "South Africa",
+                    to: "Japan",
+                    value: 1,
+                    id: "A0-2"
+                }, {
+                    from: "South Africa",
+                    to: "Japan",
+                    value: 1,
+                    id: "B2-2"
+                }, {
+                    from: "South Africa",
+                    to: "Mangolia",
+                    value: 1,
+                    id: "A1-2"
+                }, {
+                    from: "South Africa",
+                    to: "Vietnam",
+                    value: 1,
+                    id: "A2-2"
+                }, {
+                    from: "South Africa",
+                    to: "PNG",
+                    value: 1,
+                    id: "D1-2"
+                }, {
+                    from: "South Africa",
+                    to: "Maldives",
+                    value: 1,
+                    id: "B0-2"
+                }, {
+                    from: "South Africa",
+                    to: "Mangolia",
+                    value: 1,
+                    id: "C0-2"
+                },
+
+                {
+                    from: "Angola",
+                    to: "Germany",
+                    value: 1,
+                    id: "C1-2"
+                },
+
+                {
+                    from: "Morocco",
+                    to: "Finland",
+                    value: 1,
+                    id: "C2-2"
+                }, {
+                    from: "Mali",
+                    to: "Germany",
+                    value: 1,
+                    id: "B1-2"
+                },
+
+                {
+                    from: "China",
+                    to: "Mangolia",
+                    value: 1,
+                    id: "D2-2"
+                }, {
+                    from: "China",
+                    to: "Mangolia",
+                    value: 1,
+                    id: "D3-2"
+                },
+
+                {
+                    from: "Senegal",
+                    to: "Ukraine",
+                    value: 1,
+                    id: "D0-2"
+                }
+            ]);
+
+            // Make stuff animate on load
+            series.appear(1000, 100);
+
+        }); // end am5.ready()
     </script>
-    
-    <!-- HTML -->
-    
+</body>
+
+</html>
