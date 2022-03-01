@@ -1,140 +1,139 @@
-<!DOCTYPE html>
-    <head>
-    <style>
-        #chartdiv {
-        width: 100%;
-        height: 500px
-        }
-     
+<div id="chartdiv"></div>
+<style>
+    #chartdiv {
+      width: 80%;
+      height: 500px;
+    }
     </style>
-    </head>
+    
+    <!-- Resources -->
+    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/flow.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+    
+    <!-- Chart code -->
+    <script>
+    am5.ready(function() {
+    
+    // Create root element
+    // https://www.amcharts.com/docs/v5/getting-started/#Root_element
+    var root = am5.Root.new("chartdiv");
+    
+    // Set themes
+    // https://www.amcharts.com/docs/v5/concepts/themes/
+    root.setThemes([am5themes_Animated.new(root)]);
+    
+    // Create series
+    // https://www.amcharts.com/docs/v5/charts/flow-charts/
+    var series = root.container.children.push(
+      am5flow.Sankey.new(root, {
+        sourceIdField: "from",
+        targetIdField: "to",
+        valueField: "value",
+        paddingRight: 50,
+        idField: "id"
+      })
+    );
 
-    <body>
-        <div id="chartdiv"></div>
+    console.log('series',series);
+    series.nodes.get("colors").set("step", 2);
+    series.links.template.setAll({ fillStyle: "solid", fillOpacity: 0.15 });
+    // series.links.template.propertyFields.showTooltipOn = "tooltip";
+    series.links.template.showTooltipOn = "always";
 
+    // chart.links.template.tooltipText = "";
+
+
+    // highlight all links with the same id beginning
+    series.links.template.events.on("pointerover", function (event) {
+      var dataItem = event.target.dataItem;
+      console.log("DI", dataItem)
+
+    //   console.log('dataItem',dataItem)
+      var id = dataItem.get("id").split("-")[0];
+    //   dataItem.showTooltipOn = "always";
+    //   console.log('id',dataItem.get("id"));
+    //   console.log(dataItem.get("id").split("-")[0])
+      
+    
+      am5.array.each(series.dataItems, function (dataItem) {
+        if (dataItem.get("id").indexOf(id) != -1) {
+        // console.log('here',dataItem.get("id").indexOf(id))
+        // console.log("each",dataItem.get("id"))
+        // console.log("ea", dataItem.get("link"))
+          dataItem.get("link").hover();
+          dataItem.showTooltipOn = "always";
+        }
+      });
+    });
+    
+    series.links.template.events.on("pointerout", function (event) {
+      am5.array.each(series.dataItems, function (dataItem) {
+        dataItem.get("link").unhover();
+      });
+    });
+    
+    // Set data
+    // https://www.amcharts.com/docs/v5/charts/flow-charts/#Setting_data
+    series.data.setAll([
+        { from: "Brazil", to: "Portugal", value: 1, id:"A0-0" },
+        { from: "Brazil", to: "Spain", value: 1, id:"A1-0" },
+        { from: "Brazil", to: "England", value: 1, id:"A2-0" },
         
-
-        <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
-        <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
-        <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
-
-        <!-- Chart code -->
-        <script>
-        am4core.ready(function() {
-
-        // Themes begin
-        am4core.useTheme(am4themes_animated);
-        // Themes end
-
-        var chart = am4core.create("chartdiv", am4charts.SankeyDiagram);
-        chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
-
-        chart.data = [
-        { from: "A", to: "E", value: 1, id:"A0-0" },
-        { from: "A", to: "F", value: 1, id:"A1-0" },
-        { from: "A", to: "G", value: 1, id:"A2-0" },
+        { from: "Mexico", to: "Portugal", value: 1, id:"B0-0" },
+        { from: "Mexico", to: "Spain", value: 1, id:"B1-0" },
+        { from: "Mexico", to: "England", value: 1, id:"B2-0" },  
         
-        { from: "B", to: "E", value: 1, id:"B0-0" },
-        { from: "B", to: "F", value: 1, id:"B1-0" },
-        { from: "B", to: "G", value: 1, id:"B2-0" },  
+        { from: "USA", to: "Spain", value: 1, id:"C0-0" },
+        { from: "USA", to: "England", value: 1, id:"C1-0" },
+        { from: "USA", to: "France", value: 1, id:"C2-0" },    
+
+        { from: "Canada", to: "Portugal", value: 1, id:"D0-0" },
+        { from: "Canada", to: "Spain", value: 1, id:"D1-0" },
+        { from: "Canada", to: "England", value: 1, id:"D2-0" },      
+        { from: "Canada", to: "France", value: 1, id:"D3-0" },        
+
+        { from: "Portugal", to: "South Africa", value: 1, id:"A0-1" },
+        { from: "Portugal", to: "South Africa", value: 1, id:"B0-1" },      
+        { from: "Portugal", to: "Senegal", value: 1, id:"D0-1" },          
+
+        { from: "Spain", to: "South Africa", value: 1, id:"A1-1" },
+        { from: "Spain", to: "South Africa", value: 1, id:"C0-1" },      
+        { from: "Spain", to: "South Africa", value: 1, id:"D1-1" },          
+        { from: "Spain", to: "Mali", value: 1, id:"B1-1" },          
+
+        { from: "England", to: "South Africa", value: 1, id:"A2-1" },
+        { from: "England", to: "South Africa", value: 1, id:"B2-1" },      
+        { from: "England", to: "Angola", value: 1, id:"C1-1" },          
+        { from: "England", to: "China", value: 1, id:"D2-1" },  
+
+        { from: "France", to: "Morocco", value: 1, id:"C2-1" },          
+        { from: "France", to: "China", value: 1, id:"D3-1" },    
+
+        { from: "South Africa", to: "Japan", value: 1, id:"A0-2" },
+        { from: "South Africa", to: "Japan", value: 1, id:"B2-2" },      
+        { from: "South Africa", to: "Mangolia", value: 1, id:"A1-2" },          
+        { from: "South Africa", to: "Vietnam", value: 1, id:"A2-2" },          
+        { from: "South Africa", to: "PNG", value: 1, id:"D1-2" },
+        { from: "South Africa", to: "Maldives", value: 1, id:"B0-2" },          
+        { from: "South Africa", to: "Mangolia", value: 1, id:"C0-2" },          
+
+        { from: "Angola", to: "Germany", value: 1, id:"C1-2" },            
         
-        { from: "C", to: "F", value: 1, id:"C0-0" },
-        { from: "C", to: "G", value: 1, id:"C1-0" },
-        { from: "C", to: "H", value: 1, id:"C2-0" },    
+        { from: "Morocco", to: "Finland", value: 1, id:"C2-2" },              
+        { from: "Mali", to: "Germany", value: 1, id:"B1-2" },                
 
-        { from: "D", to: "E", value: 1, id:"D0-0" },
-        { from: "D", to: "F", value: 1, id:"D1-0" },
-        { from: "D", to: "G", value: 1, id:"D2-0" },      
-        { from: "D", to: "H", value: 1, id:"D3-0" },        
+        { from: "China", to: "Mangolia", value: 1, id:"D2-2" },                
+        { from: "China", to: "Mangolia", value: 1, id:"D3-2" },
 
-        { from: "E", to: "I", value: 1, id:"A0-1" },
-        { from: "E", to: "I", value: 1, id:"B0-1" },      
-        { from: "E", to: "L", value: 1, id:"D0-1" },          
-
-        { from: "F", to: "I", value: 1, id:"A1-1" },
-        { from: "F", to: "I", value: 1, id:"C0-1" },      
-        { from: "F", to: "I", value: 1, id:"D1-1" },          
-        { from: "F", to: "M", value: 1, id:"B1-1" },          
-
-        { from: "G", to: "I", value: 1, id:"A2-1" },
-        { from: "G", to: "I", value: 1, id:"B2-1" },      
-        { from: "G", to: "J", value: 1, id:"C1-1" },          
-        { from: "G", to: "N", value: 1, id:"D2-1" },  
-
-        { from: "H", to: "K", value: 1, id:"C2-1" },          
-        { from: "H", to: "N", value: 1, id:"D3-1" },    
-
-        { from: "I", to: "O", value: 1, id:"A0-2" },
-        { from: "I", to: "O", value: 1, id:"B2-2" },      
-        { from: "I", to: "Q", value: 1, id:"A1-2" },          
-        { from: "I", to: "R", value: 1, id:"A2-2" },          
-        { from: "I", to: "S", value: 1, id:"D1-2" },
-        { from: "I", to: "T", value: 1, id:"B0-2" },          
-        { from: "I", to: "Q", value: 1, id:"C0-2" },          
-
-        { from: "J", to: "U", value: 1, id:"C1-2" },            
-        
-        { from: "K", to: "V", value: 1, id:"C2-2" },              
-        { from: "M", to: "U", value: 1, id:"B1-2" },                
-
-        { from: "N", to: "Q", value: 1, id:"D2-2" },                
-        { from: "N", to: "Q", value: 1, id:"D3-2" },
-
-        { from: "L", to: "W", value: 1, id:"D0-2" }
-        ];
-
-        let hoverState = chart.links.template.states.create("hover");
-        hoverState.properties.fillOpacity = 0.6;
-
-        chart.dataFields.fromName = "from";
-        chart.dataFields.toName = "to";
-        chart.dataFields.value = "value";
-
-        chart.links.template.propertyFields.id = "id";
-        chart.links.template.colorMode = "solid";
-        chart.links.template.fill = new am4core.InterfaceColorSet().getFor("alternativeBackground");
-        chart.links.template.fillOpacity = 0.1;
-        chart.links.template.tooltipText = "";
-
-        // highlight all links with the same id beginning
-        chart.links.template.events.on("over", function(event){
-        let link = event.target;
-        let id = link.id.split("-")[0];
-
-        chart.links.each(function(link){
-            if(link.id.indexOf(id) != -1){
-            link.isHover = true;
-            }
-        })
-        })
-
-        chart.links.template.events.on("out", function(event){  
-        chart.links.each(function(link){
-            link.isHover = false;
-        })
-        })
-
-        // for right-most label to fit
-        chart.paddingRight = 30;
-
-        // make nodes draggable
-        var nodeTemplate = chart.nodes.template;
-        nodeTemplate.inert = true;
-        nodeTemplate.readerTitle = "Drag me!";
-        nodeTemplate.showSystemTooltip = true;
-        nodeTemplate.width = 20;
-
-        // make nodes draggable
-        var nodeTemplate = chart.nodes.template;
-        nodeTemplate.readerTitle = "Click to show/hide or drag to rearrange";
-        nodeTemplate.showSystemTooltip = true;
-        nodeTemplate.cursorOverStyle = am4core.MouseCursorStyle.pointer
-
-        }); // end am4core.ready()
-        </script>
-
-
-        
-
-    </body>
-</html>
+        { from: "Senegal", to: "Ukraine", value: 1, id:"D0-2" }
+        ]);
+    
+    // Make stuff animate on load
+    series.appear(1000, 100);
+    
+    }); // end am5.ready()
+    </script>
+    
+    <!-- HTML -->
+    
